@@ -1,0 +1,27 @@
+@prefix : <http://NMR/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix event: <http://purl.org/NET/c4dm/event.owl#> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+
+:NMRTimeDomain :isTimeRepresentationOf :NMRSpectrum ;
+				:isSampledUsing			:SamplingScheme .
+
+:NMRFreqDomain :isFreqRepresentationOf :NMRSpectrum ;
+				:hasResolution			:Resolution ;
+				:hasSweepWidth			:SweepWidth .
+
+:NMRTimeDomain :isDualOf	:NMRFreqDomain .
+
+:NMRFreqDomain :isDualOf	:NMRTimeDomain .
+
+:NMRSpectrum	:contains	:NMRSignals .
+
+:NMRSignals		:emanateFrom	:Nuclei .
+
+:Nuclei			:containedIn	:Protein ;
+				:coupledWith	:Nuclei .
