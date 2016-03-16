@@ -1,0 +1,102 @@
+@prefix : <http://NMR/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix event: <http://purl.org/NET/c4dm/event.owl#> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix tl: <http://purl.org/NET/c4dm/timeline.owl#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+#  I am struggling in defining precisely what an NMR spectrum is.
+#  Much of this work will be defining the resources and properties
+#    while dancing about the issue of what an NMR spectrum really is.
+#  Whenever possible, insights will be documented.
+#  There will likely be the potential for confusion as seemingly similar concepts
+#    will have different properties and need different names.
+#
+#  Broad attempt 1 at NMR spectrum:
+#    When a particular sample (defined by its contents and conditions), is placed inside
+#    a particular spectrometer (scientific instrument with certain properties - most important field strength),
+#    and particular pulsed experiments are applied (abstraction of electronic process) - the nuclei will emit rf signals.
+#    This emission is a characteristic property of the combination: sample-spectrometer-experiment.
+#    ** I'm dancing about the issue of uniqueness here **
+#    ** For one thing, there is noise.  So two identical sample-spec-experiment events will differ at least by noise.
+#    ** From another perspective, how different must the sample's contents / conditions be to be different?
+#    **   Can you walk into the same river twice?
+#    **   The scientist assumes that small variations in sample-spec-experiment conditions will not produce
+#    **     significant variation and therefore all experiments can be grouped and used for generalization.
+#    **   This may need to be treated like distinction between Honda Civic as type of car and the blue
+#    **     Honda Civic with a broken timing chain on the side of the Garden State Parkway on Dec 11, 1989.
+#
+#  Another viewpoint of the NMR spectrum is that it is an event.
+#  At a particular point in space-time a scientist inserts the sample, applies the pulsed experiment,
+#    and the spectrometer records the emission over a certain duration. (seconds to days.) 
+#  The emission is analog, but the spectrometer quickly digitizes the signal, down-samples it and 
+#    stores the numerical representation in a digital file.  There will be many digital copies of the file.
+#  The various ways of storing numbers and ordering of points in a data stream will complicate things.
+#    My first pass at the identity condition is that any equivalent digital representation of the same
+#    "event" is the same NMR spectrum.
+
+# myNMRSpectrum is a generalized instance of such a recording of the NMR spectrum.
+
+:myNMRSpectrum  
+	a event:event ;
+	event:agent [					#Spectroscopist who conducts experiment
+		a foaf:Person ;
+		foaf:name "Michael Gryk";
+		];
+	:laboratory	"UCONN Health" ;	#NMR equipment is not portable.
+	event:time [					#NMR experiment start time and duration
+		a tl:Interval ;
+		tl:at "2002-03-15T09:15:00"^^xsd:dateTime ;
+		tl:duration "PT1H"^^xsd:duration ;
+		] .
+
+# Two major ways of representing NMR spectrum.
+#  Time domain - trace of decaying sinusoids in time
+#  Frequency domain - intensity of signal vs. frequency (Hz, or relative units)
+# These two representations are mathematical duals.
+		
+:myNMRTimeDomain :isTimeRepresentationOf :myNMRSpectrum ;
+				 :isSampledUsing		 :mySamplingScheme ;
+				 rdf:type				 :classNMRTimeDomain .
+
+:myNMRFreqDomain :isFreqRepresentationOf :myNMRSpectrum ;
+				 :hasResolution	"0.1" ;
+				 :hasResolutionUnits "Hz/Pt" ;
+				 :hasSweepWidth "3000" ;
+				 :hasSweepWidthUnits "Hz" ;
+				 rdf:type				 :classNMRFreqDomain .
+
+# Duality between time and frequency will be expressed as class relationship				 
+				 
+:classNMRTimeDomain :isDualOf		:classNMRFreqDomain ;
+					rdfs:SubClassOf	:classNMRSpectrum.
+
+:classNMRFreqDomain :isDualOf		:classNMRTimeDomain ;
+					rdfs:SubClassOf	:classNMRSpectrum.
+
+# Last four here present whole-part issues.
+
+# An NMRSpectram Event is the superposition of several things.
+#  NMRSignals (what we're looking for), Artifacts (false signals, shadows), Noise, Distortions.
+
+:myNMRSpectrum		:composedOf		:myNMRSignalSet .
+
+:myNMRSignalSet		:emanatesFrom	:myNucleusSet .
+
+:myNucleusSet		:comprises		:myProtein ;
+					:coupledWith	:myNucleusSet .
+					
+# It's getting a bit late on the due date.  In reviewing the part-whole literature, I think
+#   Signals -> Spectrum is a membership relationship, because an individual NMRSignal can be part of many NMRSpectra.
+#   **  This harkens back to earlier description that a given sample-spec-experiment generates an NMRSpectrum
+#   **  If the sample-spec are the same, but the experiment is different, the same signal can be in 2 spectra.
+#   **  Just as Michael Gryk can be a member of GSLIS and AAA, signals are members of spectra.
+
+# Nucleus to protein is tricky.  In one sense, it is a component, like the handle of a cup.  However, if certain nuclei
+#   are removed they change the character of the larger object.  If I remove one leg from a chair, I have a chair with a
+#   missing leg.  If I remove all four legs, I don't have a chair any more.  If certain nuclei are removed, the protein
+#   would break into pieces and completely change it's character.
