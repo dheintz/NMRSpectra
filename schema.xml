@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema targetNamespace="http://github.com/gryk/NMRSpectra/" elementFormDefault="qualified" attributeFormDefault="unqualified">
 
-    <xs:element name="spectrum"/>
+    <xs:element name="spectrum" type="spectrumComplexType"/>
+    
+    <xs:complexType name="spectrumComplexType">
+        <xs:sequence>
+            <xs:element ref="object" maxOccurs="unbounded"/>
+            <xs:element ref="event" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="agent" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="rights" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
 </xs:schema>
