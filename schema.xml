@@ -11,3 +11,88 @@
         </xs:sequence>
     </xs:complexType>
 </xs:schema>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="nmrwml">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="computationalLineage" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="computationalLineageIdentifierType" maxOccurs="1">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute name="authority" type="xs:string"/>
+                                            <xs:attribute name="authorityURI" type="xs:anyURI"/>
+                                            <xs:attribute name="valueURI" type="xs:anyURI"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="computationalLineageIdentifierValue" type="xs:string"/>
+                            <xs:element name="computationalLineageInstantiationDate">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute name="authority" type="xs:string"/>
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="computationalLineageCreator" type="xs:string"/>
+                            <xs:element name="computationalLineageOrigin" type="xs:string"/>
+                            <xs:element name="computationalLineageFork">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="computationalLineageForkDate"
+                                            type="xs:string"/>
+                                        <xs:element name="computatationlLineageForkType"
+                                            type="xs:string"/>
+                                        <xs:element name="computationalLineageForkSubType"
+                                            type="xs:string"/>
+                                        <xs:element name="computationalLineageForkValue"
+                                            type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="computationalLineageReferenceRepository">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element
+                                            name="computationalLineageReferenceRepositoryIndentiferType"
+                                            type="xs:string"/>
+                                        <xs:element
+                                            name="computationalLineageReferenceRepositoryIndentiferValue"
+                                            type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="computationalLineageLinkingExternalEventIdentifier">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element
+                                            name="computationalLineageLinkingExternalEventType"
+                                            type="xs:string"/>
+                                        <xs:element
+                                            name="computationalLineageLinkingExternalEventValue"
+                                            type="xs:string"/>
+                                        <xs:element
+                                            name="computationalLineageLinkingEmbeddedObjectType"
+                                            type="xs:string"/>
+                                        <xs:element
+                                            name="computationalLineageLinkingEmbeddedObjectValue"
+                                            type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="computationalLineageEmbeddedObjectGroup"
+                                type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="experimentalWorkflow" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
